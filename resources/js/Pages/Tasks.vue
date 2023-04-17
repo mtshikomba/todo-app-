@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import CreateTask from "@/Pages/Task/CreateTask.vue";
+import EditTask from "@/Pages/Task/EditTask.vue";
 
 
 defineProps({
@@ -42,9 +43,9 @@ defineProps({
                                 <slot name="footer">
                                    <div class="flex justify-center">
 
-                                       <PrimaryButton class="ml-4 mr-4">
-                                           Edit
-                                       </PrimaryButton>
+                                       <EditTask class="ml-4 mr-4" id={{ task.id }}>
+
+                                       </EditTask>
 
                                        <PrimaryButton class="ml-4 mr-4">
                                            Mark Complete

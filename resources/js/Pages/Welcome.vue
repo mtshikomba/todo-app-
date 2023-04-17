@@ -66,7 +66,7 @@ defineProps({
 
             <div class="flex justify-center">
                 <div class="text-5xl mt-16">
-                    Welcome To <span >Task Manager v.1.0.0</span>
+                    <span >Task Manager v.1.0.0</span>
                 </div>
             </div>
 
@@ -96,7 +96,7 @@ defineProps({
                 </div>
 
                 <div class="ml-4 text-center text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0">
-                    Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})
+                    Made with Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})
                 </div>
             </div>
         </div>
