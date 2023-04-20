@@ -1,6 +1,5 @@
 <script setup>
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import DangerButton from '@/Components/DangerButton.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import Modal from '@/Components/Modal.vue';
@@ -8,30 +7,39 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { nextTick, ref } from 'vue';
+import Checkbox from "@/Components/Checkbox.vue";
 
 const editingTask = ref(false);
-const passwordInput = ref(null);
+const titleInput = ref(null);
+
+const props = defineProps({
+    task: null
+});
 
 const form = useForm({
-    password: '',
+    title: props.task.title,
+    description: props.task.description,
+    completed: props.task.completed
 });
 
 const editTask = () => {
     editingTask.value = true;
 
-    nextTick(() => passwordInput.value.focus());
+    nextTick(() => titleInput.value.focus());
 };
 
 const updateTask = () => {
-    form.put(route('profile.destroy'), {
+    console.log(props.task);
+    form.put(route('tasks.update', props.task.id ), {
         preserveScroll: true,
         onSuccess: () => closeModal(),
-        onError: () => passwordInput.value.focus(),
+        onError: () => titleInput.value.focus(),
         onFinish: () => form.reset(),
     });
 };
 
 const closeModal = () => {
+    console.log('test')
     editingTask.value = false;
 
     form.reset();
@@ -42,35 +50,54 @@ const closeModal = () => {
 <template>
     <section class="space-y-6">
 
-        <div class="m-4 flex justify-center">
-            <PrimaryButton @click="editTask">Edit Task</PrimaryButton>
-        </div>
+        <PrimaryButton @click="editTask">Edit Task</PrimaryButton>
 
         <Modal :show="editingTask" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900">
-                    Are you sure you want to delete your account?
+                    Update Task Information
                 </h2>
 
-                <p class="mt-1 text-sm text-gray-600">
-                    Once your account is deleted, all of its resources and data will be permanently deleted. Please
-                    enter your password to confirm you would like to permanently delete your account.
-                </p>
-
                 <div class="mt-6">
-                    <InputLabel for="password" value="Password" class="sr-only" />
+                    <InputLabel for="title" value="Title" class="sr-only" />
 
                     <TextInput
-                        id="password"
-                        ref="passwordInput"
-                        v-model="form.password"
-                        type="password"
+                        id="title"
+                        ref="titleInput"
+                        v-model="form.title"
+                        type="text"
                         class="mt-1 block w-3/4"
-                        placeholder="Password"
-                        @keyup.enter="updateTask"
+                        placeholder="Task Title"
                     />
 
-                    <InputError :message="form.errors.password" class="mt-2" />
+                    <InputError :message="form.errors.title" class="mt-2" />
+                </div>
+
+                <div class="mt-6">
+                    <InputLabel for="description" value="Description" class="sr-only" />
+
+                    <TextInput
+                        id="description"
+                        ref="descriptionInput"
+                        v-model="form.description"
+                        type="text"
+                        class="mt-1 block w-3/4"
+                        placeholder="Task Description"
+                    />
+
+                    <InputError :message="form.errors.description" class="mt-2" />
+                </div>
+
+                <div class="mt-6">
+                    <InputLabel for="complete" value="Completed" class="sr-only" />
+
+                    Completed: <Checkbox
+                        id="completed"
+                        value="{{ form.completed!==0 }}"
+                        checked=false
+                        v-model="form.completed"
+                    />
+
                 </div>
 
                 <div class="mt-6 flex justify-end">
@@ -84,6 +111,7 @@ const closeModal = () => {
                     >
                         Update Task
                     </PrimaryButton>
+
                 </div>
             </div>
         </Modal>

@@ -43,9 +43,11 @@ defineProps({
                                 <slot name="footer">
                                    <div class="flex justify-center">
 
-                                       <EditTask class="ml-4 mr-4" id={{ task.id }}>
-
-                                       </EditTask>
+                                       <EditTask
+                                           :id="task.id"
+                                           class="ml-4 mr-4"
+                                           :task="task"
+                                       ></EditTask>
 
                                        <PrimaryButton class="ml-4 mr-4">
                                            Mark Complete
@@ -55,8 +57,6 @@ defineProps({
                                 </slot>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>

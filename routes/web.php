@@ -36,9 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     /** Task Action Endpoints */
-    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
-    Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
-    Route::put('/tasks', [TaskController::class, 'update'])->name('tasks.update');
+    Route::resource('tasks', TaskController::class);
 });
 
 require __DIR__.'/auth.php';
