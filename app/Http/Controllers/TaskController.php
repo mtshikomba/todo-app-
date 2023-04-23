@@ -22,11 +22,9 @@ class TaskController extends Controller
             'completed' => 'required'
         ]);
 
-        $newTask = array_merge(['user_id' => auth()->user()->getKey()], $request->all());
-
         $task = new Task();
 
-        $task->fill($newTask);
+        $task->fill($request->all());
 
         $task->user()->associate(auth()->user());
 
