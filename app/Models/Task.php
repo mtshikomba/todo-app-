@@ -17,7 +17,7 @@ class Task extends Model
     /**
      * A task can belong to one User only
      */
-    public function owner(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

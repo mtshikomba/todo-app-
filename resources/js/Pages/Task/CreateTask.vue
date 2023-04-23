@@ -1,6 +1,5 @@
 <script setup>
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import DangerButton from '@/Components/DangerButton.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import Modal from '@/Components/Modal.vue';
@@ -8,25 +7,29 @@ import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { nextTick, ref } from 'vue';
+import Checkbox from "@/Components/Checkbox.vue";
 
 const creatingTask = ref(false);
-const passwordInput = ref(null);
+const titleInput = ref(null);
+
 
 const form = useForm({
-    password: '',
+    title: null,
+    description: null,
+    completed: false
 });
 
 const createTask = () => {
     creatingTask.value = true;
 
-    nextTick(() => passwordInput.value.focus());
+    nextTick(() => titleInput.value.focus());
 };
 
-const deleteUser = () => {
-    form.delete(route('profile.destroy'), {
+const storeTask = () => {
+    form.post(route('tasks.store'), {
         preserveScroll: true,
         onSuccess: () => closeModal(),
-        onError: () => passwordInput.value.focus(),
+        onError: () => titleInput.value.focus(),
         onFinish: () => form.reset(),
     });
 };
@@ -42,48 +45,69 @@ const closeModal = () => {
 <template>
     <section class="space-y-6">
 
-        <div class="m-4 flex justify-center">
-            <PrimaryButton @click="createTask">Create New Task</PrimaryButton>
-        </div>
+        <PrimaryButton
+            @click="createTask"
+            class="m-4"
+        >Add Task</PrimaryButton>
 
         <Modal :show="creatingTask" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900">
-                    Are you sure you want to delete your account?
+                    Task Information
                 </h2>
 
-                <p class="mt-1 text-sm text-gray-600">
-                    Once your account is deleted, all of its resources and data will be permanently deleted. Please
-                    enter your password to confirm you would like to permanently delete your account.
-                </p>
-
                 <div class="mt-6">
-                    <InputLabel for="password" value="Password" class="sr-only" />
+                    <InputLabel for="title" value="Title" class="sr-only" />
 
                     <TextInput
-                        id="password"
-                        ref="passwordInput"
-                        v-model="form.password"
-                        type="password"
+                        id="title"
+                        ref="titleInput"
+                        v-model="form.title"
+                        type="text"
                         class="mt-1 block w-3/4"
-                        placeholder="Password"
-                        @keyup.enter="deleteUser"
+                        placeholder="Task Title"
                     />
 
-                    <InputError :message="form.errors.password" class="mt-2" />
+                    <InputError :message="form.errors.title" class="mt-2" />
+                </div>
+
+                <div class="mt-6">
+                    <InputLabel for="description" value="Description" class="sr-only" />
+
+                    <TextInput
+                        id="description"
+                        v-model="form.description"
+                        type="text"
+                        class="mt-1 block w-3/4"
+                        placeholder="Task Description"
+                    />
+
+                    <InputError :message="form.errors.description" class="mt-2" />
+                </div>
+
+                <div class="mt-6">
+                    <InputLabel for="completed" value="Completed" class="sr-only" />
+
+                    Completed Status: <Checkbox
+                        id="completed"
+                        checked=false
+                        v-model="form.completed"
+                    />
+
                 </div>
 
                 <div class="mt-6 flex justify-end">
                     <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
 
-                    <DangerButton
+                    <PrimaryButton
                         class="ml-3"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
-                        @click="deleteUser"
+                        @click="storeTask"
                     >
-                        Delete Account
-                    </DangerButton>
+                        Create Task
+                    </PrimaryButton>
+
                 </div>
             </div>
         </Modal>

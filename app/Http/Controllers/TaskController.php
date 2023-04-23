@@ -16,7 +16,23 @@ class TaskController extends Controller
     }
 
     public function store(Request $request){
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'completed' => 'required'
+        ]);
 
+        $newTask = array_merge(['user_id' => auth()->user()->getKey()], $request->all());
+
+        $task = new Task();
+
+        $task->fill($newTask);
+
+        $task->user()->associate(auth()->user());
+
+        $task->save();
+
+        return Redirect::route('tasks.index');
     }
 
     public function update(Task $task, Request $request, ){
@@ -28,8 +44,6 @@ class TaskController extends Controller
         ]);
 
         $task->update($request->all());
-
-        $request->user()->save();
 
         return Redirect::route('tasks.index');
     }
