@@ -65,7 +65,7 @@ const closeModal = () => {
                         v-model="form.title"
                         type="text"
                         class="mt-1 block w-3/4"
-                        placeholder="Task Title"
+                        placeholder="Task Title..."
                     />
 
                     <InputError :message="form.errors.title" class="mt-2" />
@@ -79,7 +79,7 @@ const closeModal = () => {
                         v-model="form.description"
                         type="text"
                         class="mt-1 block w-3/4"
-                        placeholder="Task Description"
+                        placeholder="Task Description..."
                     />
 
                     <InputError :message="form.errors.description" class="mt-2" />
